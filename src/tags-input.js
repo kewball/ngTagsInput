@@ -44,6 +44,7 @@
  *    is available as $tag. This method must return either true or false. If false, the tag will not be removed.
  * @param {expression=} [onTagRemoved=NA] Expression to evaluate upon removing an existing tag. The removed tag is
  *    available as $tag.
+ * @param {expression} onBlur Expression to evaluate when the input field loses focus.
  */
 tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInputConfig, tiUtil) {
     function TagList(options, events, onTagAdding, onTagRemoving) {
@@ -154,7 +155,8 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
             onTagAdded: '&',
             onInvalidTag: '&',
             onTagRemoving: '&',
-            onTagRemoved: '&'
+            onTagRemoved: '&',
+            onBlur: '&'
         },
         replace: false,
         transclude: true,
@@ -357,6 +359,7 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
                     ngModelCtrl.$setValidity('leftoverText', true);
                 })
                 .on('input-blur', function() {
+                    scope.onBlur();
                     if (options.addOnBlur && !options.addFromAutocompleteOnly) {
                         tagList.addText(scope.newTag.text);
                     }
